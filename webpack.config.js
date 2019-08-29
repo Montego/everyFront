@@ -70,7 +70,7 @@ module.exports = {
     proxy: {
         // '/everyBack': {
         // target: 'http://localhost:8085/',
-        pathRewrite: {'^/everyBack' : ''},
+        // pathRewrite: {'^/everyBack' : ''},
         ws: true,
         changeOrigin: true
       // }
