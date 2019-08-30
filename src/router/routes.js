@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Main from "../components/Main";
+import Main from "../pages/Main";
 import Login from "../pages/Login";
 import E404 from "../pages/E404";
 

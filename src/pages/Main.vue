@@ -1,7 +1,7 @@
 <template>
   <div>
     <p>
-      привет
+      тест
     </p>
     <div>
       <Navigation class="component"></Navigation>
@@ -18,10 +18,10 @@
 </template>
 
 <script>
-    import InfoLine from "./InfoLine";
-    import Navigation from "./Navigation";
-    import Workplace from "./Workplace";
-    import AdviserBob from "./AdviserBob";
+    import InfoLine from "../components/InfoLine";
+    import Navigation from "../components/Navigation";
+    import Workplace from "../components/Workplace";
+    import AdviserBob from "../components/AdviserBob";
     export default {
         name: "Main",
         components: {AdviserBob, Workplace, Navigation, InfoLine}

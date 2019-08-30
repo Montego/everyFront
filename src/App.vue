@@ -1,20 +1,18 @@
 <template>
 
-    <Main></Main>
+  <Main></Main>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
-import Main from "./components/Main";
+  import Main from "./pages/Main";
 
-export default {
-  name: 'App',
-  components: {
-    Main,
-    HelloWorld,
-  },
-  data: () => ({
-    //
-  }),
-};
+  export default {
+    name: 'App',
+    components: {
+      Main,
+    },
+    data: () => ({
+      //
+    }),
+  };
 </script>
