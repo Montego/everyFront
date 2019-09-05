@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import checkAliveServer from './modules/checkAliveServer'
 import fuckingGreatAdvice from "./modules/outsideAPI/fuckingGreatAdvice";
+import Vuetify from 'vuetify'
+import user from "./modules/user";
 
 // import VeeValidate from 'vee-validate';
 // import VueTheMask from 'vue-the-mask'
@@ -12,6 +14,7 @@ import fuckingGreatAdvice from "./modules/outsideAPI/fuckingGreatAdvice";
 // Vue.use(Vuelidate);
 // Vue.use(Vuetify);
 Vue.use(Vuex);
+Vue.use(Vuetify);
 
 export const store = new Vuex.Store({
   state: {},
@@ -20,7 +23,8 @@ export const store = new Vuex.Store({
   actions: {},
   modules: {
     checkAliveServer,
-    fuckingGreatAdvice
+    fuckingGreatAdvice,
+    user
   },
   strict: false
 });

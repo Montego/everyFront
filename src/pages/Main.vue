@@ -1,18 +1,15 @@
 <template>
   <div>
-    <p>
-      тест
-    </p>
-    <div>
-      <Navigation class="component"></Navigation>
-    </div>
-    <div>
-      <InfoLine class="component"></InfoLine>
-      <Workplace class="component"></Workplace>
+    <!--<div>-->
+      <!--<Navigation class="component"></Navigation>-->
+    <!--</div>-->
+    <div class="row workplace_wraper">
+      <InfoLine class="component col-sm-4"></InfoLine>
+      <Workplace class="component col-8"></Workplace>
     </div>
 
 
-    <AdviserBob></AdviserBob>
+
   </div>
 
 </template>
@@ -29,7 +26,18 @@
 </script>
 
 <style scoped>
+  /*.container {*/
+    /*padding-left: 10px;*/
+    /*padding-right: 10px;*/
+  /*}*/
+  .workplace_wraper {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
   .component {
-    border: 2px solid #c5c5c5;
+    border: 1px solid #c5c5c5;
+    border-radius: 3px;
+    min-height: 90vh;
   }
 </style>
