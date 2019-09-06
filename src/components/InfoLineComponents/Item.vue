@@ -35,4 +35,8 @@
  .fa-sticky-note {
    color: #5bc0de;
  }
+ li {
+   list-style-type: none; /* Убираем маркеры */
+   padding-left: 2px;
+ }
 </style>

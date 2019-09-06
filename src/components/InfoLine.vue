@@ -10,7 +10,20 @@
     </div>
 
   <hr>
+    <!--<v-btn @click="add">add</v-btn>-->
+    <!--<v-btn @click="del">delete</v-btn>-->
+
+
     <div class="row scroll">
+      <div v-for="(name, index, level, type) in elements">
+        <ul is="Folder">
+          <!--<Folder></Folder>-->
+          <li is="Item">
+            <!--<Item></Item>-->
+          </li>
+        </ul>
+        <!--{{ index }}. {{ name }}.  {{ type}}. {{ level}}-->
+      </div>
 
         <Folder></Folder>
         <Item></Item>
@@ -45,9 +58,43 @@
       components: {Item, Folder},
       data(){
         return{
+          elements: [
+            {
+              name:'Новая папка',
+              type:'Folder',
+              level:0.0,
+              elements:[
+                {
+                  name:'Файл',
+                  type:'File',
+                  level:0.1,
+                  elements:[]
+                },
+                {
+                  name:'Новая папка',
+                  type:'Folder',
+                  level:0.2,
+                  elements:[]
+                }
+              ]
+            },{
+              name:'Новая папка',
+              type:'Folder',
+              level:1.0,
+              elements:[]
+            }
+          ],
           // folder_name:'',
           searchForm:''
         }
+      },
+      methods:{
+          add(){
+            this.elements.push(this.elements[0]);
+          },
+          del(){
+            this.elements.splice(this.elements[0]);
+          }
       }
     }
 </script>
