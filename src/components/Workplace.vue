@@ -19,7 +19,7 @@
           <template>
             <v-icon v-if="node.hasChildren() && node.collapsed" class="col-sm-1" color="#D2B48C">folder</v-icon>
             <!--<i v-if="node.hasChildren() && node.expanded" class="fas fa-folder-open"></i>-->
-            <input v-if="role!== 'user' && !node.hasChildren()" type="file">
+
             <span class="text">{{ node.text }}</span>
           </template>
           <i v-if="!node.hasChildren()" @click="downloadFile" class="col-sm-1 fas fa-download"></i>
@@ -29,12 +29,19 @@
     <div v-else>
       <tree :data="treeStoreAdmin" :options="treeOptionsAdmin" :filter="treeFilter" ref="tree" @node:checked="">
         <div slot-scope="{ node }" class="node-container">
-          <div class="node-text">{{ node.text }}</div>
-          <div class="node-controls">
+          <v-icon v-if="node.hasChildren() && node.collapsed" class="col-sm-1" color="#D2B48C">folder</v-icon>
+          <input v-if="!node.hasChildren()" type="file">
+          <div class="node-text">
+            {{ node.text }}
             <a href="#" @mouseup.stop="editNode(node)">Edit</a>
             <a href="#" @mouseup.stop="removeNode(node)">Remove</a>
             <a href="#" @mouseup.stop="addChildNode(node)">Add child</a>
           </div>
+          <!--<div class="node-controls">-->
+            <!--<a href="#" @mouseup.stop="editNode(node)">Edit</a>-->
+            <!--<a href="#" @mouseup.stop="removeNode(node)">Remove</a>-->
+            <!--<a href="#" @mouseup.stop="addChildNode(node)">Add child</a>-->
+          <!--</div>-->
         </div>
       </tree>
     </div>
