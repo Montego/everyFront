@@ -1,9 +1,9 @@
 <template>
   <div>
-   <div class="row">
-     <v-btn class="col-sm-6">Свернуть все</v-btn>
-     <v-btn class="col-sm-6">Развернуть все</v-btn>
-   </div>
+   <!--<div class="row">-->
+     <!--<v-btn class="col-sm-6">Свернуть все</v-btn>-->
+     <!--<v-btn class="col-sm-6">Развернуть все</v-btn>-->
+   <!--</div>-->
     <div class="box">
       <input class="col-sm-10" v-model="searchForm" type="search" name="поиск" placeholder="Поиск по названию">
       <v-icon class="col-sm-1" color="#5bc0de">search</v-icon>

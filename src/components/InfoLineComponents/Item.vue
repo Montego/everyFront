@@ -16,7 +16,7 @@
 <script>
   import {mapGetters, mapState} from "vuex";
 
-    export default {
+  export default {
         name: "Item",
       data(){
         return{

@@ -19,7 +19,7 @@
 <script>
   import {mapGetters, mapState} from "vuex";
 
-    export default {
+  export default {
         name: "Folder",
       data(){
         return{

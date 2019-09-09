@@ -4,6 +4,8 @@ import checkAliveServer from './modules/checkAliveServer'
 import fuckingGreatAdvice from "./modules/outsideAPI/fuckingGreatAdvice";
 import Vuetify from 'vuetify'
 import user from "./modules/user";
+import LiquorTree from 'liquor-tree';
+import tree from "./modules/tree";
 
 // import VeeValidate from 'vee-validate';
 // import VueTheMask from 'vue-the-mask'
@@ -15,6 +17,7 @@ import user from "./modules/user";
 // Vue.use(Vuetify);
 Vue.use(Vuex);
 Vue.use(Vuetify);
+Vue.use(LiquorTree);
 
 export const store = new Vuex.Store({
   state: {},
@@ -24,7 +27,8 @@ export const store = new Vuex.Store({
   modules: {
     checkAliveServer,
     fuckingGreatAdvice,
-    user
+    user,
+    tree
   },
   strict: false
 });

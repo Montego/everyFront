@@ -1,6 +1,6 @@
 <template>
   <div class="section">
-    <Header></Header>
+    <!--<Header></Header>-->
     <div class="container">
       <Main class="section_inner"></Main>
     </div>
