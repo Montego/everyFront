@@ -35,7 +35,7 @@
 
     </div>
     <v-btn> скачать</v-btn>
-    <AdviserBob v-if="role!=='user'" class="bob"></AdviserBob>
+    <!--<AdviserBob v-if="role!=='user'" class="bob"></AdviserBob>-->
   </div>
 </template>
 
