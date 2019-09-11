@@ -24,7 +24,7 @@
     </div>
 
     <div v-else>
-
+      <v-btn class="col-sm-3" @click="addFolder">+ папка</v-btn>
       <tree :data="treeStore" :options="treeOptionsAdmin" :filter="treeFilter" ref="tree" v-model="selectedNode">
         <div slot-scope="{ node }" class="node-container">
           <!--<input v-if="!node.hasChildren()" type="file">-->
@@ -46,6 +46,7 @@
 <script>
   import {mapGetters, mapState} from "vuex";
   import AdviserBob from "./AdviserBob";
+  import {AXIOS} from "../plugins/APIService";
 
   export default {
     name: "Workplace",
@@ -63,6 +64,7 @@
       ...mapState('tree', ['treeStore', 'treeOptionsUser', 'treeOptionsAdmin']),
       ...mapGetters('tree', ['get_tree', 'get_treeOptionsUser', 'get_treeOptionsAdmin']),
 
+
       selectedNode: {
         get() {
           return this.$store.state.selectedNode
@@ -73,6 +75,48 @@
       }
     },
     methods: {
+
+      addFolder() {
+        this.$refs.tree.append({
+          text: 'New folder',
+          type: 'folder',
+          children:[
+            {"text": "New file",
+             "type": "file"}
+            ]
+        });
+        let obj = {
+          text: 'New folder',
+          type: 'folder',
+          children:[
+            {"text": "New file",
+             "type": "file"}
+          ]
+        };
+        this.treeStore.push(obj);
+
+        // console.log(this.treeStore);
+        // console.log(this.$refs.tree);
+        // console.log(this.$refs.tree.data);
+
+
+        const config = {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        };
+        AXIOS.post("/treeStore/saveChange",(this.treeStore),config)
+          .then((response) => {
+            console.log(response.data);
+            this.treeStore = response.data;
+          })
+          .catch( (e) => {
+            console.error(e);
+          });
+
+
+      },
+
       editNode(node, e) {
         node.startEditing()
       },
@@ -112,7 +156,8 @@
       // getAdvice(){
       //   this.$store.dispatch('fuckingGreatAdvice/onLoadAdvice');
       // }
-    }
+    },
+
   }
 
 </script>
