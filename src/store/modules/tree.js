@@ -1,3 +1,4 @@
+import {AXIOS} from "../../plugins/APIService";
 export default {
   namespaced: true,
   state: {
@@ -146,9 +147,18 @@ export default {
 
   },
   actions: {
-    updateTree({commit}, payload) {
-      context.commit('uploadTreeStore', payload)
+    updateTree({commit}) {
+      // AXIOS.get('/treeStore/getAll')
+      AXIOS.get('/treeStore/getAllByType')
+        .then((response) => {
+          commit('uploadTreeStore', response.data)
+        }).catch(e => {
+        this.errors.push(e)
+      })
     },
+    // updateTree({commit}, payload) {
+    //   context.commit('uploadTreeStore', payload)
+    // },
     updateTreeOptionsUser({commit}, payload) {
       context.commit('uploadTreeOptionsUser', payload)
     },
@@ -158,7 +168,12 @@ export default {
 
 
   },
-  computed: {},
+  mounted (){
+    this.$store.dispatch('tree/updateTree');
+  },
+  computed: {
+
+  },
   watch: {}
 
 }

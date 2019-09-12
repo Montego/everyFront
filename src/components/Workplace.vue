@@ -17,24 +17,27 @@
             <v-icon v-if="node.hasChildren() && node.collapsed" class="col-sm-1" color="#D2B48C">folder</v-icon>
             <span class="text">{{ node.text }}</span>
           </template>
-          <i v-if="!node.hasChildren()" @click="downloadFile" class="col-sm-1 fas fa-download"></i>
+          <!--<i v-if="!node.hasChildren()" @click="downloadFile" class="col-sm-1 fas fa-download"></i>-->
         </div>
       </tree>
 
     </div>
 
     <div v-else>
-      <v-btn class="col-sm-3" @click="addFolder">+ папка</v-btn>
+      <div class="btn_add_folder">
+        <v-btn class="col-sm-3" @click="addFolder">+ папка</v-btn>
+      </div>
+
       <tree :data="treeStore" :options="treeOptionsAdmin" :filter="treeFilter" ref="tree" v-model="selectedNode">
         <div slot-scope="{ node }" class="node-container">
           <!--<input v-if="!node.hasChildren()" type="file">-->
           <div class="node-text">
             <v-icon v-if="node.hasChildren() && node.collapsed" class="col-sm-1" color="#D2B48C">folder</v-icon>
+            <!--<v-icon v-if="node.type='folder'" class="col-sm-1" color="#D2B48C">folder</v-icon>-->
             <span class="text">{{ node.text }}</span>
             <v-icon class="col-sm-1" @mouseup.stop="editNode(node)">edit</v-icon>
             <v-icon class="col-sm-1" color="#FF0000" @mouseup.stop="removeNode(node)">remove</v-icon>
-            <v-icon v-if="node.hasChildren()" class="col-sm-1" color="#20B2AA" @mouseup.stop="addChildNode(node)">add
-            </v-icon>
+            <v-icon v-if="node.type='folder'" class="col-sm-1" color="#20B2AA" @mouseup.stop="addChildNode(node)">add</v-icon>
           </div>
         </div>
       </tree>
@@ -74,31 +77,32 @@
         }
       }
     },
-    methods: {
 
+    mounted (){
+      this.$store.dispatch('tree/updateTree');
+    },
+    methods: {
       addFolder() {
         this.$refs.tree.append({
           text: 'New folder',
           type: 'folder',
-          children:[
-            {"text": "New file",
-             "type": "file"}
-            ]
+          // children:[
+          //   {"text": "New file",
+          //    "type": "file"}
+          //   ]
         });
+        console.log(this.$refs.tree.model);
+
         let obj = {
+          id:this.$refs.tree.model[this.$refs.tree.model.length-1].id,
           text: 'New folder',
           type: 'folder',
-          children:[
-            {"text": "New file",
-             "type": "file"}
-          ]
+          // children:[
+          //   {"text": "New file",
+          //    "type": "file"}
+          // ]
         };
         this.treeStore.push(obj);
-
-        // console.log(this.treeStore);
-        // console.log(this.$refs.tree);
-        // console.log(this.$refs.tree.data);
-
 
         const config = {
           headers: {
@@ -108,7 +112,7 @@
         AXIOS.post("/treeStore/saveChange",(this.treeStore),config)
           .then((response) => {
             console.log(response.data);
-            this.treeStore = response.data;
+            // this.treeStore = response.data;
           })
           .catch( (e) => {
             console.error(e);
@@ -119,18 +123,62 @@
 
       editNode(node, e) {
         node.startEditing()
+
       },
 
       removeNode(node) {
         if (confirm('Вы уверены?')) {
-          node.remove()
+          node.remove();
+          console.log(node);
+
+          const config = {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          };
+
+          AXIOS.post("/treeStore/delete",(node.id),config)
+            .then((response) => {
+              console.log(response.data);
+              // this.treeStore = response.data;
+            })
+            .catch( (e) => {
+              console.error(e);
+            });
+
         }
+
       },
 
       addChildNode(node) {
         if (node.enabled()) {
           node.append('New Node')
         }
+        console.log(node);
+
+        let parentId = node.id;
+        let obj = {
+          id:node.children[node.children.length-1].id,
+          text: 'New file',
+          type: 'file',
+        };
+
+        const config = {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        };
+
+        AXIOS.put("/treeStore/putIntoFile/"+ parentId,obj,config)
+          .then((response) => {
+            console.log(response.data);
+            // this.treeStore = response.data;
+          })
+          .catch( (e) => {
+            console.error(e);
+          });
+
+
       },
 
       collapseAll() {
@@ -166,6 +214,10 @@
   /*v-icon {*/
   /*font-size: 1.3em;*/
   /*}*/
+
+  .btn_add_folder {
+    padding-left: 11px;
+  }
 
   .tree_control {
     padding-left: 23px;
