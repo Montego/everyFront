@@ -111,7 +111,12 @@ export default {
         plainList: true
       }
     },
+
     treeOptionsAdmin: {
+      minFetchDelay: 1000,
+      fetchData: (node) => {
+        return Promise.resolve(data[node.id - 1])
+      },
       parentSelect: false,
       multiple: false,
       filter: {
@@ -152,6 +157,7 @@ export default {
       AXIOS.get('/treeStore/getAllByType')
         .then((response) => {
           commit('uploadTreeStore', response.data)
+          this.treeStore = response.data
         }).catch(e => {
         this.errors.push(e)
       })

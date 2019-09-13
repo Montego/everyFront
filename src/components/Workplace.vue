@@ -9,7 +9,8 @@
     <div class="navigation-filter">
       <input type="text" v-model="treeFilter" placeholder="Найти по названию...">
     </div>
-    <div v-if="role ==='user'" class="wrapper">
+
+    <div v-if="role !=='admin'" class="wrapper">
 
       <tree :data="treeStore" :options="treeOptionsUser" :filter="treeFilter" ref="tree" v-model="selectedNode">
         <div slot-scope="{ node }" class="node-container">
@@ -24,6 +25,7 @@
     </div>
 
     <div v-else>
+
       <div class="btn_add_folder">
         <v-btn class="col-sm-3" @click="addFolder">+ папка</v-btn>
       </div>
@@ -41,6 +43,7 @@
           </div>
         </div>
       </tree>
+
     </div>
   </div>
 
@@ -67,10 +70,19 @@
       ...mapState('tree', ['treeStore', 'treeOptionsUser', 'treeOptionsAdmin']),
       ...mapGetters('tree', ['get_tree', 'get_treeOptionsUser', 'get_treeOptionsAdmin']),
 
+      // treeStore: {
+      //   get() {
+      //     return this.$store.state.selectedNode
+      //   },
+      //   set(value) {
+      //     this.$store.commit('tree/uploadTreeStore', value)
+      //   }
+      // },
+
 
       selectedNode: {
         get() {
-          return this.$store.state.selectedNode
+          return this.$store.state.treeStore
         },
         set(value) {
           this.$store.commit('tree/uploadSelectedNode', value)
@@ -80,8 +92,18 @@
 
     mounted (){
       this.$store.dispatch('tree/updateTree');
+
+        this.$refs.tree.$on('node:editing:start', (node) => {
+          console.log('Start editing: ' + node.text)
+        });
+
+        this.$refs.tree.$on('node:editing:stop', (node, isTextChanged) => {
+          console.log('Stop editing: ' + node.text + ', ' + isTextChanged)
+        })
     },
     methods: {
+
+
       addFolder() {
         this.$refs.tree.append({
           text: 'New folder',
@@ -91,7 +113,7 @@
           //    "type": "file"}
           //   ]
         });
-        console.log(this.$refs.tree.model);
+        console.log('add folder: tree-> model',this.$refs.tree.model);
 
         let obj = {
           id:this.$refs.tree.model[this.$refs.tree.model.length-1].id,
@@ -103,7 +125,7 @@
           // ]
         };
         this.treeStore.push(obj);
-
+        console.log('tree',this.$refs.tree);
         const config = {
           headers: {
             'Content-Type': 'application/json'
@@ -111,18 +133,38 @@
         };
         AXIOS.post("/treeStore/saveChange",(this.treeStore),config)
           .then((response) => {
-            console.log(response.data);
+            console.log('response data saveChange',response.data);
             // this.treeStore = response.data;
           })
           .catch( (e) => {
             console.error(e);
           });
 
-
       },
 
+
       editNode(node, e) {
-        node.startEditing()
+        node.startEditing();
+
+        console.log('tree->tree->model: ',this.$refs.tree.tree.model);
+
+        // this.$store.commit('tree/uploadTreeStore', this.$refs.tree.tree.model);
+
+        // const config = {
+        //   headers: {
+        //     'Content-Type': 'application/json'
+        //   }
+        // };
+        // AXIOS.post("/treeStore/saveChange",(this.treeStore),config)
+        //   .then((response) => {
+        //     console.log(response.data);
+        //     // this.treeStore = response.data;
+        //   })
+        //   .catch( (e) => {
+        //     console.error(e);
+        //   });
+        console.log('treeStore after edit:',this.treeStore)
+        // console.log('after edit node',this.$refs.tree);
 
       },
 
@@ -158,7 +200,7 @@
 
         let parentId = node.id;
         let obj = {
-          id:node.children[node.children.length-1].id,
+          id: node.children[node.children.length-1].id,
           text: 'New file',
           type: 'file',
         };
@@ -177,9 +219,8 @@
           .catch( (e) => {
             console.error(e);
           });
-
-
       },
+
 
       collapseAll() {
         this.$refs.tree.collapseAll();
