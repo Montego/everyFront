@@ -150,7 +150,7 @@
             text: "New Node",
             data: {
               type: "file",
-              fileContentL:
+              fileContentL: ""
             }
           })
         }
