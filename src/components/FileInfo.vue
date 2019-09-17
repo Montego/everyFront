@@ -1,12 +1,13 @@
 <template>
-  <div>
+  <div v-if="selectedNode!== null && selectedNode.data.type !== 'folder'">
     <div class="row">
       <div class="col-sm-6">
 
         <label>Название файла:</label>
       </div>
       <div class="col-sm-6">
-        <label v-if="selectedNode!== null && !selectedNode.hasChildren()">{{this.selectedNode.text}}</label>
+        <!--{{this.selectedNode}}-->
+        <label v-if="selectedNode.data.type === 'file' ">{{this.selectedNode.text}}</label>
       </div>
       <div class="col-sm-6">
         <label>Тип файла:</label>
@@ -34,7 +35,7 @@
       </div>
 
     </div>
-    <v-btn> скачать</v-btn>
+    <v-btn v-if="selectedNode.data.type === 'file' "> скачать</v-btn>
     <!--<AdviserBob v-if="role!=='user'" class="bob"></AdviserBob>-->
   </div>
 </template>
@@ -56,6 +57,8 @@
 </script>
 
 <style scoped>
+
+
   .bob {
     position: absolute; /* Абсолютное позиционирование */
     bottom: 15px; /* Положение от нижнего края */

@@ -7,9 +7,8 @@
     <v-btn @click="changeRoleOnUser">сменить роль на user</v-btn>
     <v-btn @click="changeRoleOnAdmin">сменить роль на admin</v-btn>
     <div class="row workplace_wraper">
-      <!--<InfoLine class="component col-sm-4"></InfoLine>-->
-      <Workplace class="component col-8"></Workplace>
-      <FileInfo  class="component_fileInfo col-4"></FileInfo>
+      <Workplace class="component col-9"></Workplace>
+      <FileInfo  class="component_fileInfo col-3"></FileInfo>
     </div>
 
 

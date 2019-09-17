@@ -12,7 +12,7 @@ Vue.use(Router);
 const routes = [
     {
       name: 'Main',
-      path: '/main',
+      path: '/treeStore',
       component: Main
     },
     {

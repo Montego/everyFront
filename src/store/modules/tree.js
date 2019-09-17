@@ -154,7 +154,7 @@ export default {
   actions: {
     updateTree({commit}) {
       // AXIOS.get('/treeStore/getAll')
-      AXIOS.get('/treeStore/getAllByType')
+      AXIOS.get('/treeStore/getAllByLevel')
         .then((response) => {
           commit('uploadTreeStore', response.data)
           this.treeStore = response.data
