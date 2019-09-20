@@ -2,7 +2,9 @@
   <div class="section">
     <!--<Header></Header>-->
     <div class="container">
-      <Main class="section_inner"></Main>
+      <router-view class="section_inner">
+      </router-view>
+      <!--<Main class="section_inner"></Main>-->
     </div>
   </div>
 </template>
@@ -10,6 +12,7 @@
 <script>
   import Main from "./pages/Main";
   import Header from "./layots/Header";
+  import {AXIOS} from "./plugins/APIService";
 
   export default {
     name: 'App',
@@ -20,6 +23,19 @@
     data: () => ({
       //
     }),
+    created: function () {
+      AXIOS.interceptors.response.use(undefined, function (err) {
+        return new Promise(function (resolve, reject) {
+          if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
+            // if you ever get an unauthorized, logout the user
+            console.log('error dd')
+            this.$store.dispatch(AUTH_LOGOUT)
+            // you can also redirect to /login if needed !
+          }
+          throw err;
+        });
+      });
+    }
   };
 </script>
 <style scoped>

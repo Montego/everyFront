@@ -39,18 +39,18 @@
             <span class="text">{{ node.text }}</span>
             <v-icon class="col-sm-1" @mouseup.stop="editNode(node)">edit</v-icon>
             <v-icon class="col-sm-1" color="#FF0000" @mouseup.stop="removeNode(node)">remove</v-icon>
-
+              <!--{{node}}-->
             <v-icon v-if="node.data.type==='folder'" class="col-sm-1" color="#20B2AA" @mouseup.stop="addChildFolder(node)">create_new_folder
             </v-icon>
 
             <v-icon v-if="node.data.type==='folder'" class="col-sm-1" color="#20B2AA" @mouseup.stop="addChildNode(node)">add
             </v-icon>
+            <!--<input v-if="node.data.type ==='file'" type="file" @change="uploadFile(node)">-->
           </div>
-          <input v-if="node.data.type ==='file'" type="file">
-          <!--{{node.data}}-->
-
+          <!--<input v-if="node.data.type ==='file'" type="file" @change="uploadFile(node)">-->
+          <!--{{addedFile}}-->
         </div>
-        {{this.selectedNode}}
+        <!--{{this.selectedNode}}-->
       </tree>
 
     </div>
@@ -68,6 +68,7 @@
     components: {AdviserBob},
     data() {
       return {
+        addedFile:"",
         selectedKindOfAddNode:"",
         selectOptionsKindOfAddNode:
           [
@@ -119,6 +120,26 @@
       })
     },
     methods: {
+      uploadFile(node) {
+
+        // console.log('added file -----',e)
+        // console.log('info file -----',e.target.files[0]);
+        console.log('node -----',node);
+        // console.log('selected node -----',this.selectedNode)
+        // let file = e.target.files[0];
+        // let reader = new FileReader();
+        // reader.onloadend = (file) => {
+        //   this.addedFile = reader.result;
+        //
+        //   this.imageOf= true;
+        //   // this.base = reader.result;
+        //   // console.log('RESULT',reader.result)
+        // };
+        // reader.readAsDataURL(file);
+
+      },
+
+
       addFolder() {
         this.$refs.tree.append({
           text: "New folder",
@@ -256,7 +277,9 @@
             type: "file",
             data: {
               type: "file",
-              content: ""
+              content: "",
+              contentType:"",
+              contentSize: 0
             }
           });
           let addedObj = node.children[node.children.length-1];

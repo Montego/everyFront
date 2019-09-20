@@ -1,26 +1,29 @@
 <template>
   <div class="align-content-center">
-    <h1>Авторизация</h1>
+    <div class="center">
+      <h1>Авторизация</h1>
 
-    <form id="form" class="form">
-      <label class="form__row">
-        <div class="form__label-text">Логин (имя или почта):</div>
-        <input id="username" class="form__input" type="text" name="username" value="" placeholder="Username" required/>
+      <form id="form" class="form">
+        <label class="form__row">
+          <div class="form__label-text">Логин (имя или почта):</div>
+          <input id="username" class="form__input" type="text" name="username" value="" placeholder="Username" required/>
 
-      </label>
-      <label class="form__row">
-        <div class="form__label-text">Password:</div>
-        <input id="password" class="form__input" type="password" name="password" placeholder="Password" required/>
-      </label>
-      <span class="hidden-lg-and-up">Неправильный логин или пароль</span>
-      <div class="form__row form__links">
-        <a class="form__link" href="#">Регистрация</a>
-        <a class="form__link" href="#">Забыли пароль?</a>
-      </div>
+        </label>
+        <label class="form__row">
+          <div class="form__label-text">Password:</div>
+          <input id="password" class="form__input" type="password" name="password" placeholder="Password" required/>
+        </label>
+        <!--<span class="hidden-lg-and-up">Неправильный логин или пароль</span>-->
+        <div class="form__row form__links">
+          <a class="form__link" href="#">Регистрация</a>
+          <a class="form__link" href="#">Забыли пароль?</a>
+        </div>
 
-      <button class="form__btn-submit btn" @click.prevent="onLogin">Войти</button>
+        <button class="form__btn-submit btn" @click.prevent="onLogin">Войти</button>
 
-    </form>
+      </form>
+    </div>
+
   </div>
 
 </template>
@@ -63,7 +66,9 @@
 </script>
 
 <style scoped>
-
+  .center {
+    margin-top: 80px;
+  }
   .align-content-center {
     /*margin-top: 20%;*/
     display: flex;
