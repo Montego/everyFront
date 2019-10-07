@@ -14,10 +14,12 @@
         <label>Тип файла:</label>
       </div>
       <div v-if="selectedNode.data.contentType ===''" class="col-sm-6">
+        <!--<textarea v-model="this.itemContentDTO.contentType"></textarea>-->
         <label>{{this.itemContentDTO.contentType}}</label>
       </div>
       <div v-else class="col-sm-6">
-        <label>{{this.selectedNode.data.contentType}}</label>
+        <!--<textarea class="col-sm">{{this.selectedNode.data.contentType}}</textarea>-->
+        <label >{{this.selectedNode.data.contentType}}</label>
       </div>
 
       <div class="col-sm-6">
@@ -34,7 +36,7 @@
         <label>Когда добавлен:</label>
       </div>
       <div class="col-sm-6">
-        <label>значение</label>
+        <label>{{this.selectedNode.data.formatDateTime}}</label>
       </div>
       <div class="col-sm-6">
         <label>Кем добавлен:</label>
@@ -111,6 +113,7 @@
           .catch((e) => {
             console.error(e);
           });
+        this.$store.dispatch('tree/updateTree');
       },
 
       downloadFile() {
@@ -133,7 +136,7 @@
       },
 
       uploadFile(e) {
-
+console.log('this.selectedNode.id--------',this.selectedNode.id)
         console.log('node -----',e);
         let file = e.target.files[0];
         console.log('file ---',file);

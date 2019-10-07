@@ -180,6 +180,7 @@
           .catch((e) => {
             console.error(e);
           });
+        this.$store.dispatch('tree/updateTree');
 
       },
 
@@ -267,6 +268,7 @@
           .catch((e) => {
             console.error(e);
           });
+        this.$store.dispatch('tree/updateTree');
       },
 
       addChildNode(node) {
@@ -313,6 +315,7 @@
             .catch((e) => {
               console.error(e);
             });
+          this.$store.dispatch('tree/updateTree');
         }
         console.log('node for add child node(its a parent node,child ) ----',node);
 

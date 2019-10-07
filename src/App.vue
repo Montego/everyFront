@@ -40,8 +40,10 @@
 </script>
 <style scoped>
   .container {
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+    /*margin-left: 40px;*/
+    /*margin-right: 40px;*/
   }
   .section {
     min-height: 100vh;
