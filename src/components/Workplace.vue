@@ -1,15 +1,14 @@
 <template>
   <div>
-
+    <v-btn class="col-sm-2" @click="refreshAll">Обновить</v-btn>
     <div class="tree_control row">
       <v-btn class="col-sm-6" @click="collapseAll">Свернуть все</v-btn>
       <v-btn class="col-sm-6" @click="expandAll">Развернуть все</v-btn>
     </div>
-
+    <!--{{this.treeStore}}-->
     <div class="navigation-filter">
       <input type="text" v-model="treeFilter" placeholder="Найти по названию...">
     </div>
-
     <div v-if="role !=='admin'" class="wrapper">
 
       <tree :data="treeStore" :options="treeOptionsUser" :filter="treeFilter" ref="tree" v-model="selectedNode">
@@ -45,12 +44,10 @@
 
             <v-icon v-if="node.data.type==='folder'" class="col-sm-1" color="#20B2AA" @mouseup.stop="addChildNode(node)">add
             </v-icon>
-            <!--<input v-if="node.data.type ==='file'" type="file" @change="uploadFile(node)">-->
+
           </div>
-          <!--<input v-if="node.data.type ==='file'" type="file" @change="uploadFile(node)">-->
-          <!--{{addedFile}}-->
         </div>
-        <!--{{this.selectedNode}}-->
+
       </tree>
 
     </div>
@@ -76,18 +73,18 @@
             {name:"file"},
           ],
         treeFilter: '',
-        options: {
-          store: {
-            store: this,
-            getter: () => {
-              return Store.getters.treeStore
-            },
-            dispatcher(treeStore) {
-              Store.dispatch('updateTree', treeStore)
-            }
-          },
-          checkbox: true
-        }
+        // options: {
+        //   store: {
+        //     store: this,
+        //     getter: () => {
+        //       return Store.getters.treeStore
+        //     },
+        //     dispatcher(treeStore) {
+        //       Store.dispatch('updateTree', treeStore)
+        //     }
+        //   },
+        //   checkbox: true
+        // }
       }
     },
     computed: {
@@ -105,12 +102,12 @@
         set(value) {
           this.$store.commit('tree/uploadSelectedNode', value)
         }
-      }
+      },
     },
 
     mounted() {
       this.$store.dispatch('tree/updateTree');
-
+      this.$refs.tree.setModel(this.treeStore)
       this.$refs.tree.$on('node:editing:start', (node) => {
         console.log('Start editing: ' + node.text)
       });
@@ -120,26 +117,10 @@
       })
     },
     methods: {
-      uploadFile(node) {
-
-        // console.log('added file -----',e)
-        // console.log('info file -----',e.target.files[0]);
-        console.log('node -----',node);
-        // console.log('selected node -----',this.selectedNode)
-        // let file = e.target.files[0];
-        // let reader = new FileReader();
-        // reader.onloadend = (file) => {
-        //   this.addedFile = reader.result;
-        //
-        //   this.imageOf= true;
-        //   // this.base = reader.result;
-        //   // console.log('RESULT',reader.result)
-        // };
-        // reader.readAsDataURL(file);
+      refreshAll () {
+        this.$refs.tree.setModel(this.treeStore)
 
       },
-
-
       addFolder() {
         this.$refs.tree.append({
           text: "New folder",

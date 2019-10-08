@@ -1,6 +1,6 @@
 <template>
   <div class="section">
-    <!--<Header></Header>-->
+    <Header></Header>
     <div class="container">
       <router-view class="section_inner">
       </router-view>
@@ -42,6 +42,10 @@
   .container {
     padding-left: 5px;
     padding-right: 5px;
+    padding-top: 0px;
+    /*padding-bottom: 0px;*/
+    /*border-top: 1px black solid;*/
+    /*border: 1px black solid;*/
     /*margin-left: 40px;*/
     /*margin-right: 40px;*/
   }

@@ -1,18 +1,14 @@
 <template>
   <div>
-    <!--<div>-->
-      <!--<Navigation class="component"></Navigation>-->
-    <!--</div>-->
-    <div class="control_panel">
-      <!--Теперь я: {{this.role}}-->
+    <!--<div class="control_panel">-->
+    <div>
+      Теперь я: {{this.role}}
       <v-btn @click="changeRoleOnUser" >сменить роль на user</v-btn>
       <v-btn @click="changeRoleOnAdmin">сменить роль на admin</v-btn>
-      <!--<div class="col-sm-5"></div>-->
-      <!--<div class="col-sm-6"></div>-->
-      <v-icon class="col-sm-1" >exit_to_app</v-icon>
+      <!--<v-icon class="col-sm-1" >exit_to_app</v-icon>-->
     </div>
 
-    <div class="row workplace_wraper">
+    <div class="row workplace_filekeeper_wraper">
       <Workplace class="component col-9"></Workplace>
       <FileInfo  class="component_fileInfo col-3"></FileInfo>
     </div>
@@ -56,7 +52,7 @@
     /*padding-left: 10px;*/
     /*padding-right: 10px;*/
   /*}*/
-  .workplace_wraper {
+  .workplace_filekeeper_wraper {
     margin-left: 0;
     margin-right: 0;
   }

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Main from "../pages/Main";
 import Login from "../pages/Login";
+import Registration from "../pages/Registation";
 import E404 from "../pages/E404";
 
 
@@ -20,11 +21,11 @@ const routes = [
       path:'/login',
       component: Login
     },
-    // {
-    //   name:'registration',
-    //   path:'/registration',
-    //   component: Registation
-    // },
+    {
+      name:'registration',
+      path:'/registration',
+      component: Registration
+    },
 
     {
       path:'',

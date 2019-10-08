@@ -40,7 +40,13 @@ export default {
 
   },
   mutations: {
+    uploadInitTree(state, payload) {
+      state.treeStore.push(...payload)
+    },
     uploadTreeStore(state, payload) {
+      state.treeStore = payload
+    },
+    uploadTreeAfterLogin(state, payload) {
       state.treeStore = payload
     },
     uploadTreeOptionsUser(state, payload) {
@@ -52,19 +58,21 @@ export default {
 
   },
   actions: {
+
     updateTree({commit}) {
       // AXIOS.get('/treeStore/getAll')
       AXIOS.get('/treeStore/getAllByLevel')
         .then((response) => {
           commit('uploadTreeStore', response.data)
-          this.treeStore = response.data
+          // this.treeStore = response.data
+
         }).catch(e => {
         this.errors.push(e)
       })
     },
-    // updateTree({commit}, payload) {
-    //   context.commit('uploadTreeStore', payload)
-    // },
+    treeAfterLogin({commit}, payload) {
+      commit('uploadTreeStore',payload)
+    },
     updateTreeOptionsUser({commit}, payload) {
       context.commit('uploadTreeOptionsUser', payload)
     },

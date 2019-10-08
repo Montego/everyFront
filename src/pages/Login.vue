@@ -5,20 +5,18 @@
 
       <form id="form" class="form">
         <label class="form__row">
-          <div class="form__label-text">Логин (имя или почта):</div>
-          <input id="username" class="form__input" type="text" name="username" value="" placeholder="Username" required/>
-
+          <div class="form__label-text">Логин:</div>
+          <input id="username" class="form__input" type="text" name="username" value="" placeholder="Username" v-model="username" required/>
         </label>
         <label class="form__row">
-          <div class="form__label-text">Password:</div>
-          <input id="password" class="form__input" type="password" name="password" placeholder="Password" required/>
+          <div class="form__label-text">Пароль:</div>
+          <input id="password" class="form__input" type="password" name="password" placeholder="Password" v-model="password" required/>
         </label>
-        <!--<span class="hidden-lg-and-up">Неправильный логин или пароль</span>-->
         <div class="form__row form__links">
-          <a class="form__link" href="#">Регистрация</a>
+          <a class="form__link" href="registration">Регистрация</a>
           <a class="form__link" href="#">Забыли пароль?</a>
         </div>
-
+        <span class="alert_message" v-if="errorEnter!== ''">{{this.errorEnter}}</span>
         <button class="form__btn-submit btn" @click.prevent="onLogin">Войти</button>
 
       </form>
@@ -30,42 +28,68 @@
 
 <script>
 
-  // import {AXIOS} from "../plugins/APIService";
+  import {AXIOS} from "../plugins/APIService";
+  import {mapGetters, mapState} from "vuex";
   export default {
-    // methods: {
-    //   onLogin:  () => {
-    //     let username = document.getElementById("username").value;
-    //     let password = document.getElementById("password").value;
-    //     const config = {
-    //       headers: {
-    //         'Content-Type': 'application/x-www-form-urlencoded'
-    //       }
-    //     };
-    //     AXIOS.post("/auth/login", new URLSearchParams({
-    //         'username': username,
-    //         'password': password
-    //       }
-    //     ), config)
-    //       .then((response) => {
-    //         // console.log(response.data);
-    //         location.href='profile';
-    //       })
-    //       .catch( (e) => {
-    //         console.error(e);
-    //         document.getElementById('form').reset();
-    //         let y = document.getElementsByClassName('hidden-lg-and-up');
-    //         let msg = y[0];
-    //         // msg.classList.remove('hidden-lg-and-up');
-    //         setTimeout(msg.style.display = "block", 3000);
-    //       });
-    //   }
-    //
-    // }
+    data() {
+      return {
+        username: '',
+        password: '',
+        errorEnter: ''
+      }
+    },
+    computed: {
+      ...mapState('tree', ['treeStore', 'treeOptionsUser', 'treeOptionsAdmin']),
+      ...mapGetters('tree', ['get_tree', 'get_treeOptionsUser', 'get_treeOptionsAdmin']),
 
+      selectedNode: {
+        get() {
+          return this.$store.state.treeStore
+        },
+        set(value) {
+          this.$store.commit('tree/uploadSelectedNode', value)
+        }
+      }
+    },
+    methods: {
+      onLogin(){
+        this.errorEnter = '';
+        const config = {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        };
+        //TODO как скрыть пароль?
+
+        AXIOS.post("/auth/login", new URLSearchParams({
+            'username': this.username,
+            'password': this.password
+          }
+        ), config)
+          .then((response) => {
+            // console.log(response.data);
+            location.href='profile';
+          })
+          .catch( (e) => {
+            this.errorEnter = 'Неправильный логин или пароль';
+            console.error(e);
+          });
+
+        // this.$store.dispatch('tree/treeAfterLogin',[]);
+        // this.$store.dispatch('tree/updateTree');
+        // this.$store.dispatch('tree/initTree',this.treeStore);
+
+        this.$router.push('treeStore');
+      }
+    }
   }
 </script>
 
 <style scoped>
+  .alert_message {
+    color: red;
+    padding-bottom: 15px;
+  }
   .center {
     margin-top: 80px;
   }

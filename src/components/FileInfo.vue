@@ -1,72 +1,79 @@
 <template>
-  <div v-if="selectedNode!== null && selectedNode.data.type !== 'folder'">
-    <div class="row">
-      <div class="col-sm-6">
-
-        <label>Название файла:</label>
-      </div>
-      <div class="col-sm-6">
-        <!--{{this.selectedNode}}-->
-        <label v-if="selectedNode.data.type === 'file' ">{{this.selectedNode.text}}</label>
-      </div>
-
-      <div class="col-sm-6">
-        <label>Тип файла:</label>
-      </div>
-      <div v-if="selectedNode.data.contentType ===''" class="col-sm-6">
-        <!--<textarea v-model="this.itemContentDTO.contentType"></textarea>-->
-        <label>{{this.itemContentDTO.contentType}}</label>
-      </div>
-      <div v-else class="col-sm-6">
-        <!--<textarea class="col-sm">{{this.selectedNode.data.contentType}}</textarea>-->
-        <label >{{this.selectedNode.data.contentType}}</label>
-      </div>
-
-      <div class="col-sm-6">
-        <label>Размер файла:</label>
-      </div>
-      <div v-if="selectedNode.data.contentSize === 0" class="col-sm-6">
-        <label>{{this.itemContentDTO.contentSize}}</label>
-      </div>
-      <div v-else class="col-sm-6">
-        <label>{{this.selectedNode.data.contentSize}}</label>
-      </div>
-
-      <div class="col-sm-6">
-        <label>Когда добавлен:</label>
-      </div>
-      <div class="col-sm-6">
-        <label>{{this.selectedNode.data.formatDateTime}}</label>
-      </div>
-      <div class="col-sm-6">
-        <label>Кем добавлен:</label>
-      </div>
-      <div class="col-sm-6">
-        <label>значение</label>
-      </div>
-
+  <div>
+    <div>
+      <h2>
+        Информация о файле:
+      </h2>
     </div>
-    <div class="row">
-      <div class="col-sm">
-        <v-btn v-if="selectedNode.data.type === 'file' "  @click="downloadFile"> скачать</v-btn>
+    <div v-if="selectedNode!== null && selectedNode.data.type !== 'folder'">
+      <div class="row">
+        <div class="col-sm-6">
+
+          <label>Название файла:</label>
+        </div>
+        <div class="col-sm-6">
+          <!--{{this.selectedNode}}-->
+          <label v-if="selectedNode.data.type === 'file' ">{{this.selectedNode.text}}</label>
+        </div>
+
+        <div class="col-sm-6">
+          <label>Тип файла:</label>
+        </div>
+        <div v-if="selectedNode.data.contentType ===''" class="col-sm-6">
+          <!--<textarea v-model="this.itemContentDTO.contentType"></textarea>-->
+          <label>{{this.itemContentDTO.contentType}}</label>
+        </div>
+        <div v-else class="col-sm-6">
+          <!--<textarea class="col-sm">{{this.selectedNode.data.contentType}}</textarea>-->
+          <label >{{this.selectedNode.data.contentType}}</label>
+        </div>
+
+        <div class="col-sm-6">
+          <label>Размер файла:</label>
+        </div>
+        <div v-if="selectedNode.data.contentSize === 0" class="col-sm-6">
+          <label>{{this.itemContentDTO.contentSize}}</label>
+        </div>
+        <div v-else class="col-sm-6">
+          <label>{{this.selectedNode.data.contentSize}}</label>
+        </div>
+
+        <div class="col-sm-6">
+          <label>Когда добавлен:</label>
+        </div>
+        <div class="col-sm-6">
+          <label>{{this.selectedNode.data.formatDateTime}}</label>
+        </div>
+        <div class="col-sm-6">
+          <label>Кем добавлен:</label>
+        </div>
+        <div class="col-sm-6">
+          <label>значение</label>
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <v-btn v-if="selectedNode.data.type === 'file' "  @click="downloadFile"> скачать</v-btn>
+        </div>
+
+        <div v-if="this.role==='admin'" class="col-sm" >
+          <v-btn v-if="selectedNode.data.type === 'file' " @click="sendFile"> на сервер</v-btn>
+        </div>
+
+        <div class="col-sm" v-if="this.role==='admin'">
+          <input class="col-sm" type="file" @change="uploadFile" >
+        </div>
+
+        <!--<a href=this.path download="proposed_file_name">Download</a>-->
+        <!--{{selectedNode}}-->
+        <!--<v-uploader :preview="false" button-text="сохранить" @done="uploadDone" ></v-uploader>-->
+
+        <!--<v-uploader :multiple="true" :language="'en'" :preview="false" file-type-exts="'txt,pdf'" class="col-sm"></v-uploader>-->
       </div>
 
-      <div v-if="this.role==='admin'" class="col-sm" >
-        <v-btn v-if="selectedNode.data.type === 'file' " @click="sendFile"> сохранить</v-btn>
-      </div>
-
-      <div v-if="this.role==='admin'">
-        <input type="file" @change="uploadFile" >
-      </div>
-
-      <!--<a href=this.path download="proposed_file_name">Download</a>-->
-      <!--{{selectedNode}}-->
-      <!--<v-uploader :preview="false" button-text="сохранить" @done="uploadDone" ></v-uploader>-->
-
-      <!--<v-uploader :multiple="true" :language="'en'" :preview="false" file-type-exts="'txt,pdf'" class="col-sm"></v-uploader>-->
+      <!--<AdviserBob v-if="role!=='user'" class="bob"></AdviserBob>-->
     </div>
-
-    <!--<AdviserBob v-if="role!=='user'" class="bob"></AdviserBob>-->
   </div>
 </template>
 
