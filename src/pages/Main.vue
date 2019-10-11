@@ -2,7 +2,7 @@
   <div>
     <!--<div class="control_panel">-->
     <div>
-      Теперь я: {{this.role}}
+      <!--Теперь я: {{this.role}}-->
       <v-btn @click="changeRoleOnUser" >сменить роль на user</v-btn>
       <v-btn @click="changeRoleOnAdmin">сменить роль на admin</v-btn>
       <!--<v-icon class="col-sm-1" >exit_to_app</v-icon>-->
@@ -24,6 +24,7 @@
   import AdviserBob from "../components/AdviserBob";
   import FileInfo from "../components/FileInfo";
   import {mapGetters, mapState} from "vuex";
+  import Header from "../layots/Header";
 
   export default {
         name: "Main",
@@ -39,7 +40,7 @@
           this.$store.dispatch('user/onChangeRole',"admin");
         },
       },
-        components: {FileInfo, AdviserBob, Workplace, Navigation, InfoLine}
+        components: {Header, FileInfo, AdviserBob, Workplace, Navigation, InfoLine}
     }
 </script>
 

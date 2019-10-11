@@ -17,10 +17,11 @@ export default {
       // fetchData: (node) => {
       //   return Promise.resolve(data[node.id - 1])
       // },
-      parentSelect: false,
+      parentSelect: true,
       multiple: false,
       filter: {
-        plainList: true
+        plainList: true,
+        // emptyText: 'Ничего не найдено!',
       }
     },
   },
@@ -44,7 +45,11 @@ export default {
       state.treeStore.push(...payload)
     },
     uploadTreeStore(state, payload) {
+      // let x = payload;
+      // state.treeStore = [];
+      // state.treeStore = x;
       state.treeStore = payload
+
     },
     uploadTreeAfterLogin(state, payload) {
       state.treeStore = payload

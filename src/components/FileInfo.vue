@@ -21,11 +21,11 @@
         </div>
         <div v-if="selectedNode.data.contentType ===''" class="col-sm-6">
           <!--<textarea v-model="this.itemContentDTO.contentType"></textarea>-->
-          <label>{{this.itemContentDTO.contentType}}</label>
+          <label class="col-sm-6">{{this.itemContentDTO.contentType}}</label>
         </div>
         <div v-else class="col-sm-6">
           <!--<textarea class="col-sm">{{this.selectedNode.data.contentType}}</textarea>-->
-          <label >{{this.selectedNode.data.contentType}}</label>
+          <label class="col-sm-6">{{this.selectedNode.data.contentType}}</label>
         </div>
 
         <div class="col-sm-6">

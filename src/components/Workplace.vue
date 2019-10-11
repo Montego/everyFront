@@ -36,18 +36,17 @@
             <v-icon v-else class="col-sm-1" >attach_file</v-icon>
             <!--<v-icon v-if="node.type='folder'" class="col-sm-1" color="#D2B48C">folder</v-icon>-->
             <span class="text">{{ node.text }}</span>
-            <v-icon class="col-sm-1" @mouseup.stop="editNode(node)">edit</v-icon>
-            <v-icon class="col-sm-1" color="#FF0000" @mouseup.stop="removeNode(node)">remove</v-icon>
+            <v-icon class="control_icon col-sm-2" @mouseup.stop="editNode(node)">edit</v-icon>
+            <v-icon class="control_icon col-sm-2" color="#FF0000" @mouseup.stop="removeNode(node)">remove</v-icon>
               <!--{{node}}-->
-            <v-icon v-if="node.data.type==='folder'" class="col-sm-1" color="#20B2AA" @mouseup.stop="addChildFolder(node)">create_new_folder
+            <v-icon v-if="node.data.type==='folder'" class="control_icon col-sm-2" color="#20B2AA" @mouseup.stop="addChildFolder(node)">create_new_folder
             </v-icon>
 
-            <v-icon v-if="node.data.type==='folder'" class="col-sm-1" color="#20B2AA" @mouseup.stop="addChildNode(node)">add
+            <v-icon v-if="node.data.type==='folder'" class="control_icon col-sm-2" color="#20B2AA" @mouseup.stop="addChildNode(node)">add
             </v-icon>
 
           </div>
         </div>
-
       </tree>
 
     </div>
@@ -59,10 +58,11 @@
   import {mapGetters, mapState} from "vuex";
   import AdviserBob from "./AdviserBob";
   import {AXIOS} from "../plugins/APIService";
+  import Header from "../layots/Header";
 
   export default {
     name: "Workplace",
-    components: {AdviserBob},
+    components: {Header, AdviserBob},
     data() {
       return {
         addedFile:"",
@@ -73,18 +73,6 @@
             {name:"file"},
           ],
         treeFilter: '',
-        // options: {
-        //   store: {
-        //     store: this,
-        //     getter: () => {
-        //       return Store.getters.treeStore
-        //     },
-        //     dispatcher(treeStore) {
-        //       Store.dispatch('updateTree', treeStore)
-        //     }
-        //   },
-        //   checkbox: true
-        // }
       }
     },
     computed: {
@@ -92,8 +80,12 @@
       ...mapGetters('checkAliveServer', ['get_answerFromServer']),
       ...mapState('user', ['role',]),
       ...mapGetters('user', ['get_role']),
-      ...mapState('tree', ['treeStore', 'treeOptionsUser', 'treeOptionsAdmin']),
-      ...mapGetters('tree', ['get_tree', 'get_treeOptionsUser', 'get_treeOptionsAdmin']),
+      ...mapState('tree', ['treeStore', 'treeOptionsUser',
+        'treeOptionsAdmin'
+      ]),
+      ...mapGetters('tree', ['get_tree', 'get_treeOptionsUser',
+        'get_treeOptionsAdmin'
+      ]),
 
       selectedNode: {
         get() {
@@ -104,9 +96,8 @@
         }
       },
     },
-
     mounted() {
-      this.$store.dispatch('tree/updateTree');
+      // this.$store.dispatch('tree/updateTree');
       this.$refs.tree.setModel(this.treeStore)
       this.$refs.tree.$on('node:editing:start', (node) => {
         console.log('Start editing: ' + node.text)
@@ -118,8 +109,8 @@
     },
     methods: {
       refreshAll () {
+        // this.$store.dispatch('tree/updateTree');
         this.$refs.tree.setModel(this.treeStore)
-
       },
       addFolder() {
         this.$refs.tree.append({
@@ -332,7 +323,18 @@
 
 <style scoped>
 
-
+  .control_icon {
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+  .control_icon:hover {
+    border-radius: 50%;
+    /*background: #786b59;*/
+    /*background: #D2B48C;*/
+    font-size: 1.2em;
+    background: #D3D3D3;
+    margin: 0;
+  }
 
 
   /*v-icon {*/

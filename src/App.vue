@@ -1,6 +1,6 @@
 <template>
   <div class="section">
-    <Header></Header>
+    <Header v-if="this.$router.currentRoute.fullPath!=='/login'"></Header>
     <div class="container">
       <router-view class="section_inner">
       </router-view>
@@ -21,7 +21,7 @@
       Main,
     },
     data: () => ({
-      //
+
     }),
     created: function () {
       AXIOS.interceptors.response.use(undefined, function (err) {
