@@ -2,22 +2,26 @@
   <div class="header">
     <div class="row">
       <div class="col-sm">
-        <v-btn class="col-sm-1" >Home</v-btn>
-        <v-btn class="col-sm-3" >Список пользователей</v-btn>
+        <v-btn class="col-sm-1" @click="goToIntro">Вводная</v-btn>
+        <v-btn class="col-sm-3" @click="goToTreeStore">Методические материалы</v-btn>
       </div>
       <div class="col-sm-1 control_panel">
         <!--<label>User</label>-->
-        <v-icon class="col-sm escape_icon" @click="logout">exit_to_app</v-icon>
+        <v-icon class="col-sm-6 escape_icon" @click="logout">exit_to_app</v-icon>
       </div>
     </div>
+
+    <!--<Workplace ref="workplace" name="Workplace" class="component col-9" hidden></Workplace>-->
   </div>
 </template>
 
 <script>
-    import Workplace from "../components/Workplace";
+
     export default {
       name: "Header",
-      components: {Workplace},
+      components: {
+        // Workplace
+      },
       data() {
         return {
         }
@@ -25,8 +29,19 @@
       methods: {
         logout(){
           location.href = 'login';
+        },
+        goToTreeStore(){
+          // location.href = 'treeStore';
+          console.log(this.$refs.workplace);
+          // this.$refs.workplace.refreshAll;
+          this.$router.push('treeStore');
+
+        },
+        goToIntro(){
+          this.$router.push('intro');
         }
-      }
+      },
+
     }
 </script>
 

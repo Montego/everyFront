@@ -13,7 +13,6 @@
   import Main from "./pages/Main";
   import Header from "./layots/Header";
   import {AXIOS} from "./plugins/APIService";
-
   export default {
     name: 'App',
     components: {
@@ -21,7 +20,6 @@
       Main,
     },
     data: () => ({
-
     }),
     created: function () {
       AXIOS.interceptors.response.use(undefined, function (err) {
@@ -52,7 +50,6 @@
   .section {
     min-height: 100vh;
     background: url('/src/assets/image/background_image_1.jpg')no-repeat 50% 50% / cover;
-
   }
   .section_inner {
     background: white;

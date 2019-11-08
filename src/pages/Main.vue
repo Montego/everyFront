@@ -8,9 +8,17 @@
       <!--<v-icon class="col-sm-1" >exit_to_app</v-icon>-->
     </div>
 
-    <div class="row workplace_filekeeper_wraper">
-      <Workplace class="component col-9"></Workplace>
-      <FileInfo  class="component_fileInfo col-3"></FileInfo>
+    <!--<div class="row workplace_filekeeper_wraper">-->
+      <!--<Workplace ref="workplace" class="component col-9"></Workplace>-->
+      <!--<FileInfo  class="component_fileInfo col-3"></FileInfo>-->
+    <!--</div>-->
+    <div class="row workplace_filekeeper_wraper" v-if="this.role=='user'">
+      <Workplace ref="workplace" class="component col-sm-3"></Workplace>
+      <FileInfo class="component_fileInfo col-sm-9"></FileInfo>
+    </div>
+    <div class="row workplace_filekeeper_wraper" v-else>
+      <Workplace ref="workplace" class="component col-sm-9"></Workplace>
+      <FileInfo class="component_fileInfo col-sm-3"></FileInfo>
     </div>
 
   </div>
@@ -35,9 +43,13 @@
       methods: {
         changeRoleOnUser(){
           this.$store.dispatch('user/onChangeRole',"user");
+          this.$store.dispatch('tree/updateTreeUser');
+          // this.$refs.tree.setModel(this.treeStore);
         },
         changeRoleOnAdmin(){
           this.$store.dispatch('user/onChangeRole',"admin");
+          this.$store.dispatch('tree/updateTree');
+          // this.$refs.tree.setModel(this.treeStore);
         },
       },
         components: {Header, FileInfo, AdviserBob, Workplace, Navigation, InfoLine}

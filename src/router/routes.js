@@ -4,6 +4,8 @@ import Main from "../pages/Main";
 import Login from "../pages/Login";
 import Registration from "../pages/Registation";
 import E404 from "../pages/E404";
+import Workplace from "../components/Workplace";
+import Intro from "../components/Intro";
 
 
 
@@ -16,6 +18,16 @@ const routes = [
       path: '/treeStore',
       component: Main
     },
+  {
+    name: 'Intro',
+    path: '/intro',
+    component: Intro
+  },
+  {
+    name: 'Workplace',
+    path: '/treeStore',
+    component: Workplace
+  },
     {
       name:'login',
       path:'/login',

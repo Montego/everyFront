@@ -4,30 +4,32 @@ export default {
   state: {
     selectedNode: null,
     treeStore: [],
+    treeStoreUser: [],
 
     treeOptionsUser: {
-      multiple: false,
-      filter: {
-        plainList: true
-      }
-    },
-
-    treeOptionsAdmin: {
-      // minFetchDelay: 1000,
-      // fetchData: (node) => {
-      //   return Promise.resolve(data[node.id - 1])
-      // },
       parentSelect: true,
       multiple: false,
       filter: {
         plainList: true,
-        // emptyText: 'Ничего не найдено!',
+        emptyText: 'Ничего не найдено!',
+      }
+    },
+
+    treeOptionsAdmin: {
+      parentSelect: true,
+      multiple: false,
+      filter: {
+        plainList: true,
+        emptyText: 'Ничего не найдено!',
       }
     },
   },
   getters: {
     get_tree: state => {
       return state.treeStore;
+    },
+    get_treeUser: state => {
+      return state.treeStoreUser;
     },
     get_treeOptionsUser: state => {
       return state.treeOptionsUser;
@@ -41,18 +43,11 @@ export default {
 
   },
   mutations: {
-    uploadInitTree(state, payload) {
-      state.treeStore.push(...payload)
-    },
     uploadTreeStore(state, payload) {
-      // let x = payload;
-      // state.treeStore = [];
-      // state.treeStore = x;
       state.treeStore = payload
-
     },
-    uploadTreeAfterLogin(state, payload) {
-      state.treeStore = payload
+    uploadTreeStoreUser(state, payload) {
+      state.treeStoreUser = payload
     },
     uploadTreeOptionsUser(state, payload) {
       state.treeOptionsUser = payload
@@ -63,7 +58,16 @@ export default {
 
   },
   actions: {
+    updateTreeUser({commit}) {
+      AXIOS.get('/treeStore/getAllWithoutFiles')
+        .then((response) => {
+          commit('uploadTreeStoreUser', response.data)
+          // this.treeStore = response.data
 
+        }).catch(e => {
+        this.errors.push(e)
+      })
+    },
     updateTree({commit}) {
       // AXIOS.get('/treeStore/getAll')
       AXIOS.get('/treeStore/getAllByLevel')

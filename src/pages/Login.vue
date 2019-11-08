@@ -2,7 +2,6 @@
   <div class="align-content-center login_page">
     <div class="center">
       <h1>Авторизация</h1>
-
       <form id="form" class="form">
         <label class="form__row">
           <div class="form__label-text">Логин:</div>
@@ -19,7 +18,8 @@
         <span class="alert_message" v-if="errorEnter!== ''">{{this.errorEnter}}</span>
         <button class="form__btn-submit btn" @click.prevent="onLogin">Войти</button>
         <!--TODO fix this fucking shit( used for take method refreshALl form workplace for reactive treeStore show-->
-        <Workplace ref="workplace" class="component col-9" hidden></Workplace>
+        <!--<Workplace ref="workplace" class="component col-9" hidden></Workplace>-->
+
       </form>
     </div>
 
@@ -33,7 +33,9 @@
   import {mapGetters, mapState} from "vuex";
   import Workplace from "../components/Workplace";
   export default {
-    components: {Workplace},
+    components: {
+      // Workplace
+    },
     data() {
       return {
         username: '',
@@ -63,7 +65,7 @@
             'Content-Type': 'application/x-www-form-urlencoded'
           }
         };
-        //TODO как скрыть пароль?
+        //TODO как скрыть пароль? --> важную инфу передавать в хедерах?  https
 
         AXIOS.post("/auth/login", new URLSearchParams({
             'username': this.username,
@@ -71,22 +73,34 @@
           }
         ), config)
           .then((response) => {
-            // console.log(response.data);
-            location.href='profile';
+            console.log(response.data);
+            // location.href='profile';
+            //TODO check error liquor JSON parse
+            this.$store.dispatch('tree/updateTree');
+            // this.$refs.workplace.refreshAll();
+            this.$router.push('intro');
           })
           .then(()=>{
-
+            console.log("after ")
+            // this.$store.dispatch('tree/updateTree');
+            // console.log(this.treeStore);
+            // this.$refs.workplace.refreshAll();
+            // this.$router.push('treeStore');
           })
           .catch( (e) => {
             this.errorEnter = 'Неправильный логин или пароль';
-
-            //for testing
+            console.log(this.$refs.workplace);
+            // this.$refs.workplace.refreshAll;
             this.$store.dispatch('tree/updateTree');
-            this.$refs.workplace.refreshAll();
-            this.$router.push('treeStore');
+            this.$router.push('intro');
+            //for testing
+            // this.$store.dispatch('tree/updateTree');
+            // this.$refs.workplace.refreshAll();
+            // // location.href = 'treeStore';
+            // this.$router.push('treeStore');
 
-            // this.$refs.tree.setModel(this.treeStore);
             // console.error(e);
+
           });
 
         // this.$store.dispatch('tree/treeAfterLogin',[]);

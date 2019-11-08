@@ -1,6 +1,7 @@
 let path = require('path');
 let webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+// const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 module.exports = {
   entry: './src/main.js',
@@ -10,13 +11,15 @@ module.exports = {
     filename: 'build.js'
   },
   plugins: [
-    new HtmlWebpackPlugin()
+    new HtmlWebpackPlugin(),
+    // new VueLoaderPlugin()
   ],
   module: {
 
     rules: [
       {
-        test: /\.css$/,
+        // test: /\.css$/,
+        test:  /\.(css|sass)$/,
         use: [
           'vue-style-loader',
           'css-loader'
@@ -24,11 +27,6 @@ module.exports = {
       },      {
         test: /\.vue$/,
         loader: 'vue-loader',
-        options: {
-          loaders: {
-          }
-          // other vue-loader options go here
-        }
       },
       {
         test: /\.js$/,
@@ -55,6 +53,7 @@ module.exports = {
       }
     ]
   },
+
   resolve: {
     alias: {
       'vue$': 'vue/dist/vue.esm.js'

@@ -1,22 +1,26 @@
 <template>
   <div>
-    <v-btn class="col-sm-2" @click="refreshAll">Обновить</v-btn>
+    <!--<v-btn class="col-sm-1" @click="refreshAll">O</v-btn>-->
     <div class="tree_control row">
-      <v-btn class="col-sm-6" @click="collapseAll">Свернуть все</v-btn>
-      <v-btn class="col-sm-6" @click="expandAll">Развернуть все</v-btn>
+      <v-btn class="col-sm-6" @click="collapseAll">Свернуть</v-btn>
+      <v-btn class="col-sm-6" @click="expandAll">Развернуть</v-btn>
     </div>
     <!--{{this.treeStore}}-->
     <div class="navigation-filter">
       <input type="text" v-model="treeFilter" placeholder="Найти по названию...">
     </div>
     <div v-if="role !=='admin'" class="wrapper">
-
-      <tree :data="treeStore" :options="treeOptionsUser" :filter="treeFilter" ref="tree" v-model="selectedNode">
+<!--{{treeStoreUser}}-->
+      <tree :data="treeStoreUser" :options="treeOptionsUser" :filter="treeFilter" ref="tree" v-model="selectedNode"
+            @node:selected="onNodeSelected">
         <div slot-scope="{ node }" class="node-container">
           <template>
+            <!--<font-awesome-icon :icon="['fas', 'folder']"  v-if="node.data.type ==='folder'" class="control_icon_folder" color="#D2B48C"/>-->
+            <!--<font-awesome-icon :icon="['fas', 'file-download']"  v-else class="control_icon_folder"/>-->
             <v-icon v-if="node.data.type ==='folder'" class="col-sm-1" color="#D2B48C">folder</v-icon>
             <span class="text">{{ node.text }}</span>
           </template>
+
           <v-icon v-if="node.data.type ==='file'" class="col-sm-1"  @click="downloadFile">cloud_download</v-icon>
         </div>
       </tree>
@@ -30,7 +34,7 @@
 
       <tree :data="treeStore" :options="treeOptionsAdmin" :filter="treeFilter" ref="tree" v-model="selectedNode">
         <div slot-scope="{ node }" class="node-container">
-
+          <!--{{node}}-->
           <div class="node-text">
             <v-icon v-if="node.data.type ==='folder'" class="col-sm-1" color="#D2B48C">folder</v-icon>
             <v-icon v-else class="col-sm-1" >attach_file</v-icon>
@@ -76,14 +80,14 @@
       }
     },
     computed: {
-      ...mapState('checkAliveServer', ['answerFromServer',]),
-      ...mapGetters('checkAliveServer', ['get_answerFromServer']),
+      // ...mapState('checkAliveServer', ['answerFromServer',]),
+      // ...mapGetters('checkAliveServer', ['get_answerFromServer']),
       ...mapState('user', ['role',]),
       ...mapGetters('user', ['get_role']),
-      ...mapState('tree', ['treeStore', 'treeOptionsUser',
-        'treeOptionsAdmin'
+      ...mapState('tree', ['treeStore', 'treeOptionsUser', 'treeStoreUser',
+        'treeOptionsAdmin','selectedNode'
       ]),
-      ...mapGetters('tree', ['get_tree', 'get_treeOptionsUser',
+      ...mapGetters('tree', ['get_tree', 'get_treeOptionsUser','get_treeUser',
         'get_treeOptionsAdmin'
       ]),
 
@@ -101,22 +105,29 @@
       this.$refs.tree.setModel(this.treeStore)
       this.$refs.tree.$on('node:editing:start', (node) => {
         console.log('Start editing: ' + node.text)
+        this.$refs.tree.setModel(this.treeStore)
       });
 
       this.$refs.tree.$on('node:editing:stop', (node, isTextChanged) => {
         console.log('Stop editing: ' + node.text + ', ' + isTextChanged)
+        this.$refs.tree.setModel(this.treeStore)
       })
     },
     methods: {
+      onNodeSelected(){
+
+        console.log('node tic')
+      },
       refreshAll () {
-        // this.$store.dispatch('tree/updateTree');
+        this.$store.dispatch('tree/updateTree');
         this.$refs.tree.setModel(this.treeStore)
       },
       addFolder() {
         this.$refs.tree.append({
           text: "New folder",
-          type: "folder",
+          // type: "folder",
           data: {
+            text:"New folder",
             type: "folder"
           }
         });
