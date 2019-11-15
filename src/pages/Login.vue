@@ -5,11 +5,13 @@
       <form id="form" class="form">
         <label class="form__row">
           <div class="form__label-text">Логин:</div>
-          <input id="username" class="form__input" type="text" name="username" value="" placeholder="Username" v-model="username" required/>
+          <input id="username" class="form__input" type="text" name="username" value="" placeholder="Username"
+                 v-model="username" required/>
         </label>
         <label class="form__row">
           <div class="form__label-text">Пароль:</div>
-          <input id="password" class="form__input" type="password" name="password" placeholder="Password" v-model="password" required/>
+          <input id="password" class="form__input" type="password" name="password" placeholder="Password"
+                 v-model="password" required/>
         </label>
         <div class="form__row form__links">
           <a class="form__link" href="registration">Регистрация</a>
@@ -17,9 +19,6 @@
         </div>
         <span class="alert_message" v-if="errorEnter!== ''">{{this.errorEnter}}</span>
         <button class="form__btn-submit btn" @click.prevent="onLogin">Войти</button>
-        <!--TODO fix this fucking shit( used for take method refreshALl form workplace for reactive treeStore show-->
-        <!--<Workplace ref="workplace" class="component col-9" hidden></Workplace>-->
-
       </form>
     </div>
 
@@ -31,11 +30,9 @@
 
   import {AXIOS} from "../plugins/APIService";
   import {mapGetters, mapState} from "vuex";
-  import Workplace from "../components/Workplace";
+
   export default {
-    components: {
-      // Workplace
-    },
+    components: {},
     data() {
       return {
         username: '',
@@ -57,7 +54,7 @@
       }
     },
     methods: {
-      onLogin(){
+      onLogin() {
         this.errorEnter = '';
         // console.log(window.location)
         const config = {
@@ -65,7 +62,6 @@
             'Content-Type': 'application/x-www-form-urlencoded'
           }
         };
-        //TODO как скрыть пароль? --> важную инфу передавать в хедерах?  https
 
         AXIOS.post("/auth/login", new URLSearchParams({
             'username': this.username,
@@ -80,34 +76,17 @@
             // this.$refs.workplace.refreshAll();
             this.$router.push('intro');
           })
-          .then(()=>{
+          .then(() => {
             console.log("after ")
-            // this.$store.dispatch('tree/updateTree');
-            // console.log(this.treeStore);
-            // this.$refs.workplace.refreshAll();
-            // this.$router.push('treeStore');
           })
-          .catch( (e) => {
+          .catch((e) => {
             this.errorEnter = 'Неправильный логин или пароль';
             console.log(this.$refs.workplace);
             // this.$refs.workplace.refreshAll;
             this.$store.dispatch('tree/updateTree');
             this.$router.push('intro');
-            //for testing
-            // this.$store.dispatch('tree/updateTree');
-            // this.$refs.workplace.refreshAll();
-            // // location.href = 'treeStore';
-            // this.$router.push('treeStore');
-
-            // console.error(e);
 
           });
-
-        // this.$store.dispatch('tree/treeAfterLogin',[]);
-        // this.$store.dispatch('tree/updateTree');
-        // this.$store.dispatch('tree/initTree',this.treeStore);
-
-        // this.$router.push('treeStore');
       }
     }
   }
@@ -118,9 +97,11 @@
     color: red;
     padding-bottom: 15px;
   }
+
   .center {
     margin-top: 80px;
   }
+
   .align-content-center {
     /*margin-top: 20%;*/
     display: flex;
@@ -168,7 +149,7 @@
     min-width: 200px;
     padding: 10px;
     border: none;
-    border-radius:5px;
+    border-radius: 5px;
     background-color: #99ccff;
     font-size: 16px;
     cursor: pointer;

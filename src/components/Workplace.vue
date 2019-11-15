@@ -5,56 +5,43 @@
       <v-btn class="col-sm-6" @click="collapseAll">Свернуть</v-btn>
       <v-btn class="col-sm-6" @click="expandAll">Развернуть</v-btn>
     </div>
-    <!--{{this.treeStore}}-->
-
     <div class="navigation-filter">
       <input type="text" v-model="treeFilter" placeholder="Найти по названию...">
     </div>
     <div v-if="role !=='admin'" class="wrapper">
-<!--{{treeStoreUser}}-->
       <tree :data="treeStoreUser" :options="treeOptionsUser" :filter="treeFilter" ref="tree" v-model="selectedNode"
-            @node:selected="onNodeSelected" >
+            @node:selected="onNodeSelected">
         <div slot-scope="{ node }" class="node-container">
-          <!--{{node.id}}-->
           <template>
-            <!--<font-awesome-icon :icon="['fas', 'folder']"  v-if="node.data.type ==='folder'" class="control_icon_folder" color="#D2B48C"/>-->
-            <!--<font-awesome-icon :icon="['fas', 'file-download']"  v-else class="control_icon_folder"/>-->
             <v-icon v-if="node.data.type ==='folder'" class="col-sm-1" color="#D2B48C">folder</v-icon>
             <span class="text">{{ node.text }}</span>
           </template>
-
-          <v-icon v-if="node.data.type ==='file'" class="col-sm-1"  @click="downloadFile">cloud_download</v-icon>
+          <v-icon v-if="node.data.type ==='file'" class="col-sm-1" @click="downloadFile">cloud_download</v-icon>
         </div>
       </tree>
-
     </div>
 
     <div v-else>
       <div class="btn_add_folder">
         <v-btn class="col-sm-3" @click="addFolder">+ папка</v-btn>
       </div>
-
       <tree :data="treeStore" :options="treeOptionsAdmin" :filter="treeFilter" ref="tree" v-model="selectedNode">
         <div slot-scope="{ node }" class="node-container">
-          <!--{{node}}-->
           <div class="node-text">
             <v-icon v-if="node.data.type ==='folder'" class="col-sm-1" color="#D2B48C">folder</v-icon>
-
-            <v-icon v-else class="col-sm-1" >attach_file</v-icon>
-            <!--<v-icon v-if="node.type='folder'" class="col-sm-1" color="#D2B48C">folder</v-icon>-->
+            <v-icon v-else class="col-sm-1">attach_file</v-icon>
             <span class="text">{{ node.text }}</span>
             <v-icon class="control_icon col-sm-2" @mouseup.stop="editNode(node)">edit</v-icon>
             <v-icon class="control_icon col-sm-2" color="#FF0000" @mouseup.stop="removeNode(node)">remove</v-icon>
-            <v-icon v-if="node.data.type==='folder'" class="control_icon col-sm-2" color="#20B2AA" @mouseup.stop="addChildFolder(node)">create_new_folder
+            <v-icon v-if="node.data.type==='folder'" class="control_icon col-sm-2" color="#20B2AA"
+                    @mouseup.stop="addChildFolder(node)">create_new_folder
             </v-icon>
-
-            <v-icon v-if="node.data.type==='folder'" class="control_icon col-sm-2" color="#20B2AA" @mouseup.stop="addChildNode(node)">add
+            <v-icon v-if="node.data.type==='folder'" class="control_icon col-sm-2" color="#20B2AA"
+                    @mouseup.stop="addChildNode(node)">add
             </v-icon>
           </div>
-
         </div>
       </tree>
-
     </div>
   </div>
 
@@ -62,42 +49,32 @@
 
 <script>
   import {mapGetters, mapState} from "vuex";
-  import AdviserBob from "./AdviserBob";
   import {AXIOS} from "../plugins/APIService";
   import Header from "../layots/Header";
 
   export default {
     name: "Workplace",
-    components: {Header, AdviserBob},
+    components: {Header},
     data() {
       return {
-        fileDescription:'',
-        files:[],
-        file:{
+        fileDescription: '',
+        files: [],
+        file: {
           id: '',
-          name:'',
-          date:'',
-          description:''
+          name: '',
+          date: '',
+          description: ''
         },
-        addedFile:"",
-        selectedKindOfAddNode:"",
-        selectOptionsKindOfAddNode:
-          [
-            {name:"folder"},
-            {name:"file"},
-          ],
         treeFilter: '',
       }
     },
     computed: {
-      // ...mapState('checkAliveServer', ['answerFromServer',]),
-      // ...mapGetters('checkAliveServer', ['get_answerFromServer']),
       ...mapState('user', ['role',]),
       ...mapGetters('user', ['get_role']),
       ...mapState('tree', ['treeStore', 'treeOptionsUser', 'treeStoreUser',
-        'treeOptionsAdmin','selectedNode', 'treeStoreFilesByParent',
+        'treeOptionsAdmin', 'selectedNode', 'treeStoreFilesByParent',
       ]),
-      ...mapGetters('tree', ['get_tree', 'get_treeOptionsUser','get_treeUser',
+      ...mapGetters('tree', ['get_tree', 'get_treeOptionsUser', 'get_treeUser',
         'get_treeOptionsAdmin',
       ]),
 
@@ -119,15 +96,18 @@
       }
     },
     mounted() {
-      // this.$store.dispatch('tree/updateTree');
-      this.$refs.tree.setModel(this.treeStore)
+      this.$store.dispatch('tree/updateTree');
+      this.$store.dispatch('tree/updateTreeUser');
+      this.$refs.tree.setModel(this.treeStore);
+      this.$refs.tree.setModel(this.treeStoreUser);
+
       this.$refs.tree.$on('node:editing:start', (node) => {
-        console.log('Start editing: ' + node.text)
+        console.log('Start editing: ' + node.text);
         this.$refs.tree.setModel(this.treeStore)
       });
 
       this.$refs.tree.$on('node:editing:stop', (node, isTextChanged) => {
-        console.log('Stop editing: ' + node.text + ', ' + isTextChanged)
+        console.log('Stop editing: ' + node.text + ', ' + isTextChanged);
         this.$refs.tree.setModel(this.treeStore)
       })
     },
@@ -135,7 +115,7 @@
       onNodeSelected(node) {
         console.log(node.id);
         let parentId = node.id;
-        AXIOS.get('treeStore/getAllFilesByParent/'+ parentId)
+        AXIOS.get('treeStore/getAllFilesByParent/' + parentId)
           .then((response) => {
             let serverAnswer = response.data;
             this.$store.commit('tree/uploadTreeStoreFilesByParent', serverAnswer);
@@ -145,34 +125,33 @@
         })
       },
 
-      refreshAll () {
+      refreshAll() {
         this.$store.dispatch('tree/updateTree');
         this.$refs.tree.setModel(this.treeStore)
       },
       addFolder() {
         this.$refs.tree.append({
           text: "New folder",
-          // type: "folder",
           data: {
-            text:"New folder",
+            text: "New folder",
             type: "folder"
           }
         });
 
-        console.log("tree -> ",this.$refs.tree);
+        console.log("tree -> ", this.$refs.tree);
 
         let node = {
           children: [],
-          data: this.$refs.tree.model[this.$refs.tree.model.length-1].data,
-          id: this.$refs.tree.model[this.$refs.tree.model.length-1].id,
-          isBatch: this.$refs.tree.model[this.$refs.tree.model.length-1].isBatch,
-          isEditing: this.$refs.tree.model[this.$refs.tree.model.length-1].isEditing,
+          data: this.$refs.tree.model[this.$refs.tree.model.length - 1].data,
+          id: this.$refs.tree.model[this.$refs.tree.model.length - 1].id,
+          isBatch: this.$refs.tree.model[this.$refs.tree.model.length - 1].isBatch,
+          isEditing: this.$refs.tree.model[this.$refs.tree.model.length - 1].isEditing,
           parent: "",
           showChildren: true,
-          states: this.$refs.tree.model[this.$refs.tree.model.length-1].states,
-          tree: this.$refs.tree.model[this.$refs.tree.model.length-1].tree,
-          type: this.$refs.tree.model[this.$refs.tree.model.length-1].data.type,
-          text: this.$refs.tree.model[this.$refs.tree.model.length-1].data.text,
+          states: this.$refs.tree.model[this.$refs.tree.model.length - 1].states,
+          tree: this.$refs.tree.model[this.$refs.tree.model.length - 1].tree,
+          type: this.$refs.tree.model[this.$refs.tree.model.length - 1].data.type,
+          text: this.$refs.tree.model[this.$refs.tree.model.length - 1].data.text,
           level: "root"
         };
 
@@ -205,7 +184,7 @@
               'Content-Type': 'application/json'
             }
           };
-          AXIOS.put("/treeStore/editNode/"+id, (newName), config)
+          AXIOS.put("/treeStore/editNode/" + id, (newName), config)
             .then((response) => {
               console.log('response data saveChange', response.data);
             })
@@ -247,7 +226,7 @@
           })
         }
 
-        let addedObj = node.children[node.children.length-1];
+        let addedObj = node.children[node.children.length - 1];
         let parentId = node.id;
         let addedNode = {
           children: [],
@@ -283,18 +262,17 @@
 
       addChildNode(node) {
         if (node.enabled()) {
-          // node.append('New Node')
           node.append({
             text: "New Node",
             type: "file",
             data: {
               type: "file",
               content: "",
-              contentType:"",
+              contentType: "",
               contentSize: 0
             }
           });
-          let addedObj = node.children[node.children.length-1];
+          let addedObj = node.children[node.children.length - 1];
           let parentId = node.id;
           let addedNode = {
             children: [],
@@ -327,7 +305,7 @@
             });
           this.$store.dispatch('tree/updateTree');
         }
-        console.log('node for add child node(its a parent node,child ) ----',node);
+        console.log('node for add child node(its a parent node,child ) ----', node);
 
       },
 
@@ -337,22 +315,14 @@
       expandAll() {
         this.$refs.tree.expandAll();
       },
-      downloadFile() {
-        console.log('====', this.selectedNode)
-      },
+
       changeRoleOnUser() {
         this.$store.dispatch('user/onChangeRole', "user");
       },
       changeRoleOnAdmin() {
         this.$store.dispatch('user/onChangeRole', "admin");
       },
-      getTest() {
-        this.$store.dispatch('checkAliveServer/onLoadAnswerFromServer');
-      },
 
-      // getAdvice(){
-      //   this.$store.dispatch('fuckingGreatAdvice/onLoadAdvice');
-      // }
     },
 
   }
@@ -365,19 +335,14 @@
     padding-left: 4px;
     padding-right: 4px;
   }
+
   .control_icon:hover {
     border-radius: 50%;
-    /*background: #786b59;*/
-    /*background: #D2B48C;*/
+
     font-size: 1.2em;
     background: #D3D3D3;
     margin: 0;
   }
-
-
-  /*v-icon {*/
-  /*font-size: 1.3em;*/
-  /*}*/
 
   .btn_add_folder {
     padding-left: 11px;
@@ -405,15 +370,4 @@
     box-sizing: border-box;
   }
 
-  .wrapper {
-    /*min-height: 90vh;*/
-    /*overflow: scroll;*/
-  }
-
-  .bob {
-    position: absolute; /* Абсолютное позиционирование */
-    bottom: 15px; /* Положение от нижнего края */
-    right: 15px; /* Положение от правого края */
-    line-height: 1px;
-  }
 </style>

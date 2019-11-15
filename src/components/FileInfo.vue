@@ -11,7 +11,7 @@
     <div>
       <div v-if="this.role!=='admin'">
         <div v-if="selectedNode!== null && selectedNode.data.type === 'folder'">
-          <table class="table_files" border="1" >
+          <table class="table_files" border="1">
             <thead>
             <tr>
               <th>
@@ -45,7 +45,6 @@
               <label>Название файла:</label>
             </div>
             <div class="col-sm-6">
-              <!--{{this.selectedNode}}-->
               <label v-if="selectedNode.data.type === 'file' ">{{this.selectedNode.text}}</label>
             </div>
 
@@ -53,11 +52,9 @@
               <label>Тип файла:</label>
             </div>
             <div v-if="selectedNode.data.contentType ===''" class="col-sm-6">
-              <!--<textarea v-model="this.itemContentDTO.contentType"></textarea>-->
               <label class="col-sm-6">{{this.itemContentDTO.contentType}}</label>
             </div>
             <div v-else class="col-sm-6">
-              <!--<textarea class="col-sm">{{this.selectedNode.data.contentType}}</textarea>-->
               <label class="col-sm-6">{{this.selectedNode.data.contentType}}</label>
             </div>
             <div class="col-sm-6">
@@ -77,24 +74,21 @@
             </div>
             <div class="col-sm">
               <label>
-              Описание:
+                Описание:
               </label>
-              <!--<div>-->
-              <!--{{selectedNode.data.description}}-->
-              <textarea class="col-sm description_place" type="text" v-model="itemContentDTO.description" >
-                <!--{{this.selectedNode.data.description}}-->
+              <textarea class="col-sm description_place" type="text" v-model="itemContentDTO.description">
               </textarea>
-              </div>
+            </div>
           </div>
           <div class="row">
             <div class="col-sm">
               <v-btn v-if="selectedNode.data.type === 'file'" @click="downloadFile"> скачать</v-btn>
             </div>
             <div v-if="this.role==='admin'" class="col-sm">
-              <v-btn v-if="selectedNode.data.type === 'file' & itemContentDTO.content!=='' " @click="sendFile"> на
-                сервер
-              </v-btn>
-              <v-btn v-else @click="sendFile" disabled> на сервер</v-btn>
+              <!--<v-btn v-if="selectedNode.data.type === 'file' & itemContentDTO.content!=='' " @click="sendFile"> на-->
+              <!--сервер-->
+              <!--</v-btn>-->
+              <v-btn @click="sendFile"> на сервер</v-btn>
             </div>
             <div class="col-sm" v-if="this.role==='admin'">
               <input class="col-sm" type="file" @change="uploadFile">
@@ -108,7 +102,6 @@
 </template>
 
 <script>
-  import AdviserBob from "./AdviserBob";
   import {mapGetters, mapState} from "vuex";
   import {AXIOS} from "../plugins/APIService";
 
@@ -116,45 +109,34 @@
     name: "FileInfo",
     data() {
       return {
-
         itemContentDTO: {
           content: "",
           contentName: "",
           contentType: "",
           contentSize: 0,
           description: ""
-          // type:"file"
         }
-
       }
     },
     mounted() {
-      let download = document.createElement('script')
-      download.setAttribute('src', '/src/plugins/download.js')
+      let download = document.createElement('script');
+      download.setAttribute('src', '/src/plugins/download.js');
       document.head.append(download)
     },
     computed: {
-      ...mapState('checkAliveServer', ['answerFromServer',]),
-      ...mapGetters('checkAliveServer', ['get_answerFromServer']),
       ...mapState('user', ['role',]),
       ...mapGetters('user', ['get_role']),
-      ...mapState('tree', ['selectedNode','treeStoreFilesByParent']),
+      ...mapState('tree', ['selectedNode', 'treeStoreFilesByParent']),
       ...mapGetters('tree', ['get_selectedNode', 'get_treeStoreFilesByParent']),
     },
     methods: {
-      getTest() {
-        this.$store.dispatch('checkAliveServer/onLoadAnswerFromServer');
-      },
       sendFile() {
         const config = {
           headers: {
             'Content-Type': 'application/json'
           }
         };
-
-        // console.log(node);
         let payload = this.itemContentDTO;
-        // console.log('payload: ',payload)
         AXIOS.put("/itemContent/editItemContent/" + this.selectedNode.id, (payload), config)
           .then((response) => {
             console.log('itemContent', response.data);
@@ -173,9 +155,6 @@
       },
 
       downloadFile() {
-        let id = this.selectedNode.id;
-        // window.open('http://localhost:8080/getOne/' + id);
-
         AXIOS.get("/itemContent/getOne/" + this.selectedNode.id)
           .then((response) => {
             let content = response.data.content;
@@ -190,20 +169,7 @@
       },
 
       downloadFileLikeUser(id) {
-
         window.open('http://localhost:8085/itemContent/getOneItem/' + id);
-
-        // AXIOS.get("/itemContent/getOne/" + id)
-        //   .then((response) => {
-        //     let content = response.data.content;
-        //     let name = response.data.contentName;
-        //     let type = response.data.contentType;
-        //     download(content, name, type);
-        //     console.log('itemContent', response.data);
-        //   })
-        //   .catch((e) => {
-        //     console.error(e);
-        //   });
       },
 
       uploadFile(e) {
@@ -228,7 +194,7 @@
       },
 
     },
-    components: {AdviserBob}
+    components: {}
   }
 </script>
 
@@ -236,13 +202,8 @@
   .table_files {
     width: 100%;
   }
+
   .description_place {
     border: 1px grey solid;
-  }
-  .bob {
-    position: absolute; /* Абсолютное позиционирование */
-    bottom: 15px; /* Положение от нижнего края */
-    right: 15px; /* Положение от правого края */
-    line-height: 1px;
   }
 </style>
