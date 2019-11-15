@@ -6,14 +6,16 @@
       <v-btn class="col-sm-6" @click="expandAll">Развернуть</v-btn>
     </div>
     <!--{{this.treeStore}}-->
+
     <div class="navigation-filter">
       <input type="text" v-model="treeFilter" placeholder="Найти по названию...">
     </div>
     <div v-if="role !=='admin'" class="wrapper">
 <!--{{treeStoreUser}}-->
       <tree :data="treeStoreUser" :options="treeOptionsUser" :filter="treeFilter" ref="tree" v-model="selectedNode"
-            @node:selected="onNodeSelected">
+            @node:selected="onNodeSelected" >
         <div slot-scope="{ node }" class="node-container">
+          <!--{{node.id}}-->
           <template>
             <!--<font-awesome-icon :icon="['fas', 'folder']"  v-if="node.data.type ==='folder'" class="control_icon_folder" color="#D2B48C"/>-->
             <!--<font-awesome-icon :icon="['fas', 'file-download']"  v-else class="control_icon_folder"/>-->
@@ -37,19 +39,19 @@
           <!--{{node}}-->
           <div class="node-text">
             <v-icon v-if="node.data.type ==='folder'" class="col-sm-1" color="#D2B48C">folder</v-icon>
+
             <v-icon v-else class="col-sm-1" >attach_file</v-icon>
             <!--<v-icon v-if="node.type='folder'" class="col-sm-1" color="#D2B48C">folder</v-icon>-->
             <span class="text">{{ node.text }}</span>
             <v-icon class="control_icon col-sm-2" @mouseup.stop="editNode(node)">edit</v-icon>
             <v-icon class="control_icon col-sm-2" color="#FF0000" @mouseup.stop="removeNode(node)">remove</v-icon>
-              <!--{{node}}-->
             <v-icon v-if="node.data.type==='folder'" class="control_icon col-sm-2" color="#20B2AA" @mouseup.stop="addChildFolder(node)">create_new_folder
             </v-icon>
 
             <v-icon v-if="node.data.type==='folder'" class="control_icon col-sm-2" color="#20B2AA" @mouseup.stop="addChildNode(node)">add
             </v-icon>
-
           </div>
+
         </div>
       </tree>
 
@@ -69,6 +71,14 @@
     components: {Header, AdviserBob},
     data() {
       return {
+        fileDescription:'',
+        files:[],
+        file:{
+          id: '',
+          name:'',
+          date:'',
+          description:''
+        },
         addedFile:"",
         selectedKindOfAddNode:"",
         selectOptionsKindOfAddNode:
@@ -85,10 +95,10 @@
       ...mapState('user', ['role',]),
       ...mapGetters('user', ['get_role']),
       ...mapState('tree', ['treeStore', 'treeOptionsUser', 'treeStoreUser',
-        'treeOptionsAdmin','selectedNode'
+        'treeOptionsAdmin','selectedNode', 'treeStoreFilesByParent',
       ]),
       ...mapGetters('tree', ['get_tree', 'get_treeOptionsUser','get_treeUser',
-        'get_treeOptionsAdmin'
+        'get_treeOptionsAdmin',
       ]),
 
       selectedNode: {
@@ -99,6 +109,14 @@
           this.$store.commit('tree/uploadSelectedNode', value)
         }
       },
+      treeStoreFilesByParent: {
+        get() {
+          return this.$store.state.treeStoreFilesByParent
+        },
+        set(value) {
+          this.$store.commit('tree/uploadTreeStoreFilesByParent', value)
+        }
+      }
     },
     mounted() {
       // this.$store.dispatch('tree/updateTree');
@@ -114,10 +132,19 @@
       })
     },
     methods: {
-      onNodeSelected(){
-
-        console.log('node tic')
+      onNodeSelected(node) {
+        console.log(node.id);
+        let parentId = node.id;
+        AXIOS.get('treeStore/getAllFilesByParent/'+ parentId)
+          .then((response) => {
+            let serverAnswer = response.data;
+            this.$store.commit('tree/uploadTreeStoreFilesByParent', serverAnswer);
+            console.log(response)
+          }).catch(e => {
+          this.errors.push(e)
+        })
       },
+
       refreshAll () {
         this.$store.dispatch('tree/updateTree');
         this.$refs.tree.setModel(this.treeStore)

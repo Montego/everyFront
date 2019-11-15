@@ -32,6 +32,8 @@
         },
         goToTreeStore(){
           // location.href = 'treeStore';
+          this.$store.dispatch('tree/updateTree');
+          this.$store.dispatch('tree/updateTreeUser');
           console.log(this.$refs.workplace);
           // this.$refs.workplace.refreshAll;
           this.$router.push('treeStore');

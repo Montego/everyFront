@@ -6,6 +6,8 @@ export default {
     treeStore: [],
     treeStoreUser: [],
 
+    treeStoreFilesByParent: [],
+
     treeOptionsUser: {
       parentSelect: true,
       multiple: false,
@@ -25,6 +27,9 @@ export default {
     },
   },
   getters: {
+    get_treeStoreFilesByParent: state =>{
+      return state.treeStoreFilesByParent;
+    },
     get_tree: state => {
       return state.treeStore;
     },
@@ -43,6 +48,9 @@ export default {
 
   },
   mutations: {
+    uploadTreeStoreFilesByParent(state, payload) {
+      state.treeStoreFilesByParent = payload
+    },
     uploadTreeStore(state, payload) {
       state.treeStore = payload
     },

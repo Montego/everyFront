@@ -11,24 +11,29 @@
     <div>
       <div v-if="this.role!=='admin'">
         <div v-if="selectedNode!== null && selectedNode.data.type === 'folder'">
-
-          <table class="table_files" border="1">
+          <table class="table_files" border="1" >
+            <thead>
             <tr>
-              <th>Имя файла</th>
-              <th>Дата обновления</th>
-              <th>Краткое описание</th>
+              <th>
+                Имя файла
+              </th>
+              <th>
+                Дата обновления
+              </th>
+              <th>
+                Краткое описание
+              </th>
             </tr>
-            <tr>
-              <td><a href="#">rfrsjfsjdfjsdfjsjdf</a>
+            </thead>
+            <tbody>
+            <tr v-for="item in treeStoreFilesByParent" align="center">
+              <td>
+                <a @click="downloadFileLikeUser(item.id)">{{item.text}}</a>
               </td>
-              <td>3,5</td>
-              <td>36</td>
+              <td>{{item.data.formatDateTime}}</td>
+              <td>{{item.data.description}}</td>
             </tr>
-            <tr>
-              <td>35,5</td>
-              <td>4</td>
-              <td>36⅔</td>
-            </tr>
+            </tbody>
           </table>
         </div>
       </div>
@@ -55,7 +60,6 @@
               <!--<textarea class="col-sm">{{this.selectedNode.data.contentType}}</textarea>-->
               <label class="col-sm-6">{{this.selectedNode.data.contentType}}</label>
             </div>
-
             <div class="col-sm-6">
               <label>Размер файла:</label>
             </div>
@@ -65,13 +69,22 @@
             <div v-else class="col-sm-6">
               <label>{{this.selectedNode.data.contentSize}}</label>
             </div>
-
             <div class="col-sm-6">
               <label>Когда добавлен:</label>
             </div>
             <div class="col-sm-6">
               <label>{{this.selectedNode.data.formatDateTime}}</label>
             </div>
+            <div class="col-sm">
+              <label>
+              Описание:
+              </label>
+              <!--<div>-->
+              <!--{{selectedNode.data.description}}-->
+              <textarea class="col-sm description_place" type="text" v-model="itemContentDTO.description" >
+                <!--{{this.selectedNode.data.description}}-->
+              </textarea>
+              </div>
           </div>
           <div class="row">
             <div class="col-sm">
@@ -95,7 +108,6 @@
 </template>
 
 <script>
-  // import {} from "../plugins/download";
   import AdviserBob from "./AdviserBob";
   import {mapGetters, mapState} from "vuex";
   import {AXIOS} from "../plugins/APIService";
@@ -104,27 +116,13 @@
     name: "FileInfo",
     data() {
       return {
-        headers: [
-          {
-            text: 'Dessert (100g serving)',
-            align: 'left',
-            sortable: false,
-            value: 'name',
-          },
-          {text: 'Calories', value: 'calories'},
-          {text: 'Fat (g)', value: 'fat'},
-          {text: 'Carbs (g)', value: 'carbs'},
-          {text: 'Protein (g)', value: 'protein'},
-          {text: 'Iron (%)', value: 'iron'},
-        ],
-        desserts: [],
-
 
         itemContentDTO: {
           content: "",
           contentName: "",
           contentType: "",
           contentSize: 0,
+          description: ""
           // type:"file"
         }
 
@@ -140,8 +138,8 @@
       ...mapGetters('checkAliveServer', ['get_answerFromServer']),
       ...mapState('user', ['role',]),
       ...mapGetters('user', ['get_role']),
-      ...mapState('tree', ['selectedNode']),
-      ...mapGetters('tree', ['get_selectedNode']),
+      ...mapState('tree', ['selectedNode','treeStoreFilesByParent']),
+      ...mapGetters('tree', ['get_selectedNode', 'get_treeStoreFilesByParent']),
     },
     methods: {
       getTest() {
@@ -166,6 +164,7 @@
             this.itemContentDTO.contentName = "";
             this.itemContentDTO.contentType = "";
             this.itemContentDTO.contentSize = 0;
+            this.itemContentDTO.description = "";
           })
           .catch((e) => {
             console.error(e);
@@ -188,6 +187,23 @@
           .catch((e) => {
             console.error(e);
           });
+      },
+
+      downloadFileLikeUser(id) {
+
+        window.open('http://localhost:8085/itemContent/getOneItem/' + id);
+
+        // AXIOS.get("/itemContent/getOne/" + id)
+        //   .then((response) => {
+        //     let content = response.data.content;
+        //     let name = response.data.contentName;
+        //     let type = response.data.contentType;
+        //     download(content, name, type);
+        //     console.log('itemContent', response.data);
+        //   })
+        //   .catch((e) => {
+        //     console.error(e);
+        //   });
       },
 
       uploadFile(e) {
@@ -219,6 +235,9 @@
 <style scoped>
   .table_files {
     width: 100%;
+  }
+  .description_place {
+    border: 1px grey solid;
   }
   .bob {
     position: absolute; /* Абсолютное позиционирование */
